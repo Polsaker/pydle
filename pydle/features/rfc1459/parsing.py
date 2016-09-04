@@ -9,7 +9,7 @@ class RFC1459Message(pydle.protocol.Message):
         self._kw = kw
         self._kw['command'] = command
         self._kw['params'] = params
-        self._kw['source'] = source
+        self._kw['source'] = CaselessString(source)
         self._valid = _valid
         self._raw = _raw
         self.__dict__.update(self._kw)
@@ -194,6 +194,8 @@ def parse_user(raw):
     if protocol.USER_SEPARATOR in raw:
         nick, user = raw.split(protocol.USER_SEPARATOR)
 
+    nick = CaselessString(nick)
+
     return nick, user, host
 
 def parse_modes(modes, current, behaviour):
@@ -262,3 +264,9 @@ def parse_modes(modes, current, behaviour):
         i += 1
 
     return current
+
+
+ class CaselessString(str):
+     """ Regular str with caseless comparison """
+     def __eq__(self, txt):
+         return self.__str__().casefold() == txt.casefold()
