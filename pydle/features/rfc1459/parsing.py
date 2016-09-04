@@ -266,7 +266,10 @@ def parse_modes(modes, current, behaviour):
     return current
 
 
- class CaselessString(str):
-     """ Regular str with caseless comparison """
-     def __eq__(self, txt):
-         return self.__str__().casefold() == txt.casefold()
+class CaselessString(str):
+    """ Regular str with caseless comparison """
+    def __eq__(self, txt):
+        return self.__str__().casefold() == txt.casefold()
+    
+    def __hash__(self):
+        return hash(self.__str__().casefold())
